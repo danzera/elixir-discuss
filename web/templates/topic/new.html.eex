@@ -12,6 +12,7 @@
 		<!-- f represents the form -->
 		<!-- Elixir will set helper properties on the <input> tag that gets generated -->
 		<%= text_input f, :title, placeholder: "Topic Title", class: "form-control" %>
+		<%= error_tag f, :title %>
 	</div>
 
 	<!-- submit button will say "Save Topic" and have the specified class property -->

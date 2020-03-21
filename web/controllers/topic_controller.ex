@@ -29,4 +29,32 @@ defmodule Discuss.TopicController do
 		# Phoenix knows to look for "new.html" in the "templates > topic" directory because of the module name above, "Discuss.TopicController"
     render conn, "new.html", changeset: changeset # any custom data can be included as additional args the way "changeset" is included here
 	end
+	
+	# handler for POST /topics route
+	# "params" will include the data from our form
+	# 	%{"topic" => topic} = params
+	def create(conn, %{"topic" => topic}) do
+		# generate a new changeset from the topic params that were passed in from the form
+		# this represents the changes that we want to make to our database
+		# empty struct is used for the first argument because we are creating a new record
+		changeset = Topic.changeset(%Topic{}, topic)
+	
+		# actually insert the record to our database via the Repo module
+		# able to reference Repo directly b/c Ecto functionality has been imported/aliased
+		# into our controller via Discuss.Web's controller function
+		# Repo.insert automatically checks to see if the changeset is valid, does not attempt to insert if it's not valid
+		case Repo.insert(changeset) do
+			# 2 possible returns from Repo.insert
+			{:ok, post} -> 
+				IO.inspect(post) # post is what was actually inserted
+			{:error, changeset} ->
+				IO.puts("ERROR")
+				IO.inspect(changeset)
+				# show the user the form again if their input was invalid
+				render conn, "new.html", changeset: changeset
+				
+		end
+		# return conn
+	end
+
 end
