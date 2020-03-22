@@ -17,7 +17,9 @@ defmodule Discuss.Router do
     pipe_through :browser # Use the default browser stack
 
 		# ROUTES
-		get "/", PageController, :index
+		 # breaking RESTful convention here to show all topics at the base route
+		 # would generally use the route: get "/topics", TopicController, :index
+		get "/", TopicController, :index
 		get "/topics/new", TopicController, :new
 		post "/topics", TopicController, :create
   end

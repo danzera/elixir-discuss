@@ -7,6 +7,16 @@ defmodule Discuss.TopicController do
 	# aliasing here allows us to refer to "Topic" directly (seen below) as opposed to "Discuss.Topic"
 	alias Discuss.Topic
 
+	@doc """
+	Show a list of all topics.
+	"""
+	def index(conn, _params) do
+		# fetch all topics from the database
+		topics = Repo.all(Topic) # equivalent to Discuss.Repo.all(Discuss.Topic), shortened by aliasing Repo via Discuss.Web and Topic above
+		# render the index template and make the property "topics" available within the template
+		render conn, "index.html", topics: topics
+	end
+
 	# conn (connection) is an Elixir struct that is the entire focal point of our Phoenix applciation
 	# 	it represents the incoming request to our application AND the outgoing response
 	# 	gets passed around from one function to another until the request has been fulfilled its ready to be returned to the user
