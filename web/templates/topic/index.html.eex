@@ -1,4 +1,4 @@
-<h2 class="center">All Topics</h2>
+<h5>All Topics</h5>
 
 <ul class="collection">
 	<%= for topic <- @topics do %>
@@ -8,3 +8,15 @@
 		</li>
 	<% end %>
 </ul>
+
+<div class="fixed-action-btn">
+	<!-- use path helper topic_path, insulates against potential changes to the "topics/new" url -->
+	<!-- topic_path will still be able to locate the appropiate path -->
+	<!-- link gets a keyword list - class needs to be passed as an argument - can't have HTML/CSS mixed into the Elixir code block -->
+	<!-- this will generate an <a> tag with the specified path and classes -->
+	<!-- close the Elixir block with a "do" - allows us to add any HTML inside of that tag that gets generated -->
+	<%= link to: topic_path(@conn, :new), class: "btn-floating btn-large waves-effect waves-light red" do %>
+		<i class="material-icons">add</i>
+	<% end %>
+</div>
+        

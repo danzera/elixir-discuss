@@ -57,14 +57,14 @@ defmodule Discuss.TopicController do
 			# 2 possible returns from Repo.insert
 			{:ok, post} -> # post is what was actually inserted
 				conn # conn is the first arg to both put_flash and redirect functions, is piped along into both
-				|> put_flash(:info, "Topic Created") # shows msg to user once when the page is reloaded
+				|> put_flash(:info, "Topic created successfully") # shows msg to user once when the page is reloaded
 				|> redirect(to: topic_path(conn, :index)) # keyword list with one entry, sends user to the route using the TopicController index function
 			{:error, changeset} ->
 				IO.puts("ERROR")
 				IO.inspect(changeset)
 				# show the user the form again if their input was invalid
 				conn
-				|> put_flash(:error, "Topic must have a title") # conn is automatically piped in as the first argument
+				|> put_flash(:error, "Error: Topic not created") # conn is automatically piped in as the first argument
 				|> render "new.html", changeset: changeset # conn is automatically piped in as the first argument
 				
 		end
