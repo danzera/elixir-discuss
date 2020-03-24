@@ -5,6 +5,12 @@
 		<li class="collection-item">
 			<!-- must wrap all Elixir code in appropriate tags so it is evaluated as such -->
 			<%= topic.title %>
+			<div class="right">
+				<!-- link tags used in lieu of actual <a> tags, Elixir/Phoenix generate the appropriate HTML -->
+				<!-- can pass the entire "topic" object from the for-loop into the topic_path -->
+				<!-- topic_path function knows to pull the id property from the topic struct in order to locate the appropriate route, /topics/:id/edit in this case -->
+				<%= link "Edit", to: topic_path(@conn, :edit, topic) %>
+			</div>
 		</li>
 	<% end %>
 </ul>

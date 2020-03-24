@@ -22,7 +22,9 @@ defmodule Discuss.Router do
 		get "/", TopicController, :index
 		get "/topics/new", TopicController, :new
 		post "/topics", TopicController, :create
-  end
+		get "/topics/:id/edit", TopicController, :edit # use router wildcard to catch the topic ID, params object will have id property on it as a result
+		put "/topics/:id", TopicController, :update
+	end
 
   # Other scopes may use custom stacks.
   # scope "/api", Discuss do

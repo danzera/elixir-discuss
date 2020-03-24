@@ -55,9 +55,9 @@ defmodule Discuss.TopicController do
 		# Repo.insert automatically checks to see if the changeset is valid, does not attempt to insert if it's not valid
 		case Repo.insert(changeset) do
 			# 2 possible returns from Repo.insert
-			{:ok, post} -> # post is what was actually inserted
+			{:ok, _topic} -> # _topic is what was actually inserted
 				conn # conn is the first arg to both put_flash and redirect functions, is piped along into both
-				|> put_flash(:info, "Topic created successfully") # shows msg to user once when the page is reloaded
+				|> put_flash(:info, "Topic created successfully!") # shows msg to user once when the page is reloaded
 				|> redirect(to: topic_path(conn, :index)) # keyword list with one entry, sends user to the route using the TopicController index function
 			{:error, changeset} ->
 				IO.puts("ERROR")
@@ -65,10 +65,50 @@ defmodule Discuss.TopicController do
 				# show the user the form again if their input was invalid
 				conn
 				|> put_flash(:error, "Error: Topic not created") # conn is automatically piped in as the first argument
-				|> render "new.html", changeset: changeset # conn is automatically piped in as the first argument
+				|> render("new.html", changeset: changeset) # conn is automatically piped in as the first argument
 				
 		end
 		# return conn
 	end
 
+	@doc """
+	Show a form to edit an existing topic.
+	"""
+	# ":id" wildcard specified in router.ex file, be more specific in naming the variable here at the controller function level
+	def edit(conn, %{"id" => topic_id}) do
+		# get existing topic data from the database via Ecto/Repo
+		topic = Repo.get(Topic, topic_id)
+		# generate a changeset with the data from the existing topic - TO BE PASSED TO THE FORM
+		# params arg is defaulted to an empty map in the definition of the changeset function (see Topic model)
+		changeset = Topic.changeset(topic) # form helpers expect to receive a changeset to work with
+		 # return the existing topic to the form to display the current title, and have the id for reference if/when the form is posted
+		render conn, "edit.html", changeset: changeset, topic: topic
+	end
+
+	@doc """
+	`params` includes the `id` and attributes of the topic being updated
+	"""
+	def update(conn, %{"id" => topic_id, "topic" => updated_topic}) do
+		# equivalent long-hand code to the piping done below
+		existing_topic = Repo.get(Topic, topic_id) # fetch the existing topic from the database to use in the changeset
+		changeset = Topic.changeset(existing_topic, updated_topic) # generate the changeset based on what's in the database and what we received from the form
+		
+		# the above code could be done via piping, as follows
+		# however we need a reference to the existing_topic struct to re-render the "edit.html" page in the event of an error (further below)
+		# changeset =
+		#		Repo.get(Topic, topic_id) # existing topic in the database (existing_topic above)
+		#		|> Topic.changeset(topic) # gets piped into making a Changeset to be used in updating the database
+
+		# update existing topic with our Changeset using the Ecto.Repo module
+		case Repo.update(changeset) do
+			{:ok, _topic} ->
+				conn
+				|> put_flash(:info, "Topic updated successfully!")
+				|> redirect(to: topic_path(conn, :index))
+			{:error, changeset} ->
+				conn
+				|> put_flash(:error, "Error: Topic not created") # conn is automatically piped in as the first argument
+				|> render("edit.html", changeset: changeset, topic: existing_topic) # conn is automatically piped in as the first argument, "edit.html" template expects topic to be passed in
+		end
+	end
 end
