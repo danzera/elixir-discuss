@@ -55,13 +55,17 @@ defmodule Discuss.TopicController do
 		# Repo.insert automatically checks to see if the changeset is valid, does not attempt to insert if it's not valid
 		case Repo.insert(changeset) do
 			# 2 possible returns from Repo.insert
-			{:ok, post} -> 
-				IO.inspect(post) # post is what was actually inserted
+			{:ok, post} -> # post is what was actually inserted
+				conn # conn is the first arg to both put_flash and redirect functions, is piped along into both
+				|> put_flash(:info, "Topic Created") # shows msg to user once when the page is reloaded
+				|> redirect(to: topic_path(conn, :index)) # keyword list with one entry, sends user to the route using the TopicController index function
 			{:error, changeset} ->
 				IO.puts("ERROR")
 				IO.inspect(changeset)
 				# show the user the form again if their input was invalid
-				render conn, "new.html", changeset: changeset
+				conn
+				|> put_flash(:error, "Topic must have a title") # conn is automatically piped in as the first argument
+				|> render "new.html", changeset: changeset # conn is automatically piped in as the first argument
 				
 		end
 		# return conn
