@@ -111,4 +111,14 @@ defmodule Discuss.TopicController do
 				|> render("edit.html", changeset: changeset, topic: existing_topic) # conn is automatically piped in as the first argument, "edit.html" template expects topic to be passed in
 		end
 	end
+
+	def delete(conn, %{"id" => topic_id}) do
+		# delete function expects a struct, so we fetch the record first
+		Repo.get!(Topic, topic_id) |> Repo.delete! # the ! will send the user an error message automatically if an error occurs, so we don't need to use a case statement here
+
+		# redirect the user back to the index route if the deletion is successful
+		conn
+		|> put_flash(:info, "Topic deleted successfully!")
+		|> redirect(to: topic_path(conn, :index))
+	end
 end

@@ -10,6 +10,10 @@
 				<!-- can pass the entire "topic" object from the for-loop into the topic_path -->
 				<!-- topic_path function knows to pull the id property from the topic struct in order to locate the appropriate route, /topics/:id/edit in this case -->
 				<%= link "Edit", to: topic_path(@conn, :edit, topic) %>
+				<%# by default, <link> tags always make GET requests %>
+				<%# need to specify the alternate request type via the "method" option using the request type as an atom %>
+				<%# if you look at the underlying HTML that Phoenix generates, it wraps the link in a <form> %>
+				<%= link "Delete", to: topic_path(@conn, :delete, topic), method: :delete %>
 			</div>
 		</li>
 	<% end %>
