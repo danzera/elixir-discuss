@@ -31,6 +31,16 @@ defmodule Discuss.Router do
 		# the resources helper also assumes that the ID property is called "id"
 	end
 
+	# namespace URLs in your app with "scope"
+	scope "/auth", Discuss do
+		# this sends all requests through "pipeline :browser" above
+		# BEFORE any request to any route INSIDE THIS SCOPE is sent to the controller, some amount of preproccessing on the request will be done
+		pipe_through :browser # Use the default browser stack
+
+		get "/:provider", AuthController, :request
+		get "/:provider/callback", AuthController, :callback
+	end
+
   # Other scopes may use custom stacks.
   # scope "/api", Discuss do
   #   pipe_through :api

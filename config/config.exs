@@ -25,10 +25,10 @@ config :logger, :console,
 # ueberauth cofiguration for authentication
 config :ueberauth, Ueberauth,
   providers: [
-    github: { Ueberauth.Strategy.Github, [] }
+    github: { Ueberauth.Strategy.Github, [default_scope: "user:email"] }
 	]
 
-config :ueberauth, Ueberauth.Strategy.Github.Oauth,
+config :ueberauth, Ueberauth.Strategy.Github.OAuth,
 	client_id: System.get_env("GITHUB_CLIENT_ID"),
 	client_secret: System.get_env("GITHUB_CLIENT_SECRET")
 
