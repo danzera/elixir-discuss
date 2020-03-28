@@ -62,13 +62,12 @@ defmodule Discuss.TopicController do
 			{:error, changeset} ->
 				IO.puts("ERROR")
 				IO.inspect(changeset)
-				# show the user the form again if their input was invalid
+				# return conn -> show the user the form again if their input was invalid
 				conn
 				|> put_flash(:error, "Error: Topic not created") # conn is automatically piped in as the first argument
 				|> render("new.html", changeset: changeset) # conn is automatically piped in as the first argument
 				
 		end
-		# return conn
 	end
 
 	@doc """
