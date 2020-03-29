@@ -11,6 +11,10 @@ defmodule Discuss.TopicController do
 	Show a list of all topics.
 	"""
 	def index(conn, _params) do
+		# log user info
+		IO.puts("===== conn.assigns ======")
+		IO.inspect(conn.assigns)
+		IO.puts("=========================")
 		# fetch all topics from the database
 		topics = Repo.all(Topic) # equivalent to Discuss.Repo.all(Discuss.Topic), shortened by aliasing Repo via Discuss.Web and Topic above
 		# render the index template and make the property "topics" available within the template

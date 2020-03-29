@@ -4,7 +4,7 @@ defmodule Discuss.AuthController do
 	plug Ueberauth
 
 	# ueberauth expects us to define a function called "callback"
-	def callback(%{assigns: %{ueberauth_auth: auth}} = conn, params) do
+	def callback(%{assigns: %{ueberauth_auth: auth}} = conn, _params) do
 		user_params = %{
 			email: auth.info.email,
 			provider: to_string(auth.provider), # auth.provider returns an atom, must be coerced to a string to be inserted into the database
