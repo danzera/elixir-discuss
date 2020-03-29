@@ -38,6 +38,7 @@ defmodule Discuss.Router do
 		# BEFORE any request to any route INSIDE THIS SCOPE is sent to the controller, some amount of preproccessing on the request will be done
 		pipe_through :browser # Use the default browser stack
 
+		get "/logout", AuthController, :logout # get request breaks here from restful conventions, could be a DELETE request, but this prevents us from having to create a form in the template
 		get "/:provider", AuthController, :request
 		get "/:provider/callback", AuthController, :callback
 	end

@@ -48,6 +48,15 @@ defmodule Discuss.AuthController do
 				# this guarantees that this insert_or_update_user function will have the same return type regardless of which case is hit
 				{:ok, user}
 		end
-		
+	end
+
+	def logout(conn, _params) do
+		# could use put_session(:user_id, nil)...
+		# better to use configure_session(drop: true)
+		# this future-proofs our app in case additional info is added to the session at some point
+		# this is better from a security standpoint
+		conn
+		|> configure_session(drop: true)
+		|> redirect(to: topic_path(conn, :index)) # send user to list of all topics if there is an error signing in
 	end
 end

@@ -21,6 +21,21 @@
 		<nav class="light-blue">
 			<div class="nav-wrapper container">
 				<a href="/" class="brand-logo">Discussions</a>
+				<ul class="right">
+					<%# case/cond statements in templates look messy, so unless necessary, if statements are typically easier and more readable %>
+					<%= if @conn.assigns[:user] do %> <%# user is logged in %>
+						<li>
+							<%# wipe the user's session data %>
+							<%= link "Logout", to: auth_path(@conn, :logout) %>
+						</li>
+					<% else %> <%# user is NOT logged in %>
+						<li>
+							<%# send user to the authentication route %>
+							<%# need to specify the provider (github) in the arguments to auth_path because :provider is a wildcard in our associated route %>
+							<%= link "Login with Github", to: auth_path(@conn, :request, "github") %>
+						</li>
+					<% end %>
+				</ul>
 			</div>
 		</nav>
     <div class="container">
