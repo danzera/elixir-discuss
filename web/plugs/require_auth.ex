@@ -1,4 +1,4 @@
-defmodule Discuss.Plug.RequireAuth do
+defmodule Discuss.Plugs.RequireAuth do
 	import Plug.Conn # gives us access to the halt() function used below
 	import Phoenix.Controller # give us access to put_flash and redirect functions
 	

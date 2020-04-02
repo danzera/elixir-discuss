@@ -7,6 +7,10 @@ defmodule Discuss.TopicController do
 	# aliasing here allows us to refer to "Topic" directly (seen below) as opposed to "Discuss.Topic"
 	alias Discuss.Topic
 
+	# add our require_auth plug to this controller
+	# we do NOT want it to run for the index function, so we specify a "guard clause" to only run it for the specified functions
+	plug Discuss.Plugs.RequireAuth when action in [:new, :create, :edit, :update, :delete]
+
 	@doc """
 	Show a list of all topics.
 	"""
