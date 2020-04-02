@@ -14,7 +14,7 @@ defmodule Discuss.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/topics", Discuss do
+  scope "/", Discuss do
     pipe_through :browser # Use the default browser stack
 
 		# ROUTES

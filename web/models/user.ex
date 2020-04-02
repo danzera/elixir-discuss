@@ -5,6 +5,7 @@ defmodule Discuss.User do
 		field :email, :string
 		field :provider, :string
 		field :token, :string
+		has_many :topics, Discuss.Topic # inform Phoenix that an individual user may have many topics, and that the topics model module should be used to setup the relationship
 		
 		 # timestamps function is called the same way it is in our migration file
 		 # informs our schema of the existence of timestamps in the database

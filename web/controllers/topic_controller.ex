@@ -55,7 +55,13 @@ defmodule Discuss.TopicController do
 		# generate a new changeset from the topic params that were passed in from the form
 		# this represents the changes that we want to make to our database
 		# empty struct is used for the first argument because we are creating a new record
-		changeset = Topic.changeset(%Topic{}, topic)
+		# changeset = Topic.changeset(%Topic{}, topic) # this line is superseded by the changeset with a user model association, generated below
+		
+		# conn.assigns[:user] is EQUIVALENT TO conn.assigns.user, no fantastic reason to use one over the other
+		# https://hexdocs.pm/ecto/2.2.11/Ecto.html#build_assoc/3
+		changeset = conn.assigns.user # current user, piped in as the first arg to build_assoc
+			|> build_assoc(:topics) # this produces a %Topic{} struct with an association to the user model and pipes it in to Topic.changeset as the first arg
+			|> Topic.changeset(topic) # the topic that is generated from the changeset function now will have a reference to a user model as well
 	
 		# actually insert the record to our database via the Repo module
 		# able to reference Repo directly b/c Ecto functionality has been imported/aliased
