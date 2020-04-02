@@ -10,6 +10,9 @@ defmodule Discuss.TopicController do
 	# add our require_auth plug to this controller
 	# we do NOT want it to run for the index function, so we specify a "guard clause" to only run it for the specified functions
 	plug Discuss.Plugs.RequireAuth when action in [:new, :create, :edit, :update, :delete]
+	# function plug defintion - this logic is specific to this controller, so we define it directly within the controller as opposed to creating a separate module
+	# phoenix will look for a function within this controller with the same name as the specified atom (check_topic_owner)
+	plug :check_topic_owner when action in [:edit, :update, :delete]
 
 	@doc """
 	Show a list of all topics.
@@ -133,5 +136,28 @@ defmodule Discuss.TopicController do
 		conn
 		|> put_flash(:info, "Topic deleted successfully!")
 		|> redirect(to: topic_path(conn, :index))
+	end
+
+	# ensure user attempting to alter an existing topic is the user that created the topic
+	# reroute them if they are NOT the user that created the topic
+	defp check_topic_owner(conn, _params) do # just like module plugs, _params is NOT data from the router/form
+		# logic will be very similar to the require_auth plug
+		# pattern match on the conn object for info the user is trying to access
+		# resources helper in router automatically pulls the id out of the url and attaches it to the conn object under the params.id property
+		%{params: %{"id" => topic_id}} = conn
+
+		# fetch topic from the database and compare its data to the user making the request
+		if Repo.get(Topic, topic_id).user_id == conn.assigns.user.id do
+			# user id's match => return the connection
+			conn
+		else
+			# user id's do NOT match, prevent them from continuing the current flow
+			conn
+			|> put_flash(:error, "You shall not pass!")
+			|> redirect(to: topic_path(conn, :index))
+			|> halt() # stop the flow at this plug, return connection to user without advancing to controller handlers
+		end
+
+		
 	end
 end
