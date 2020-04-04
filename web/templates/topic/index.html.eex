@@ -4,7 +4,7 @@
 	<%= for topic <- @topics do %>
 		<li class="collection-item">
 			<!-- must wrap all Elixir code in appropriate tags so it is evaluated as such -->
-			<%= topic.title %>
+			<%= link topic.title, to: topic_path(@conn, :show, topic) %>
 
 			<%# restrict edit/delete functionality to the user that created the given topic %>
 			<%= if @conn.assigns.user.id == topic.user_id do  %>

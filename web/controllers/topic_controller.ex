@@ -28,6 +28,13 @@ defmodule Discuss.TopicController do
 		render conn, "index.html", topics: topics
 	end
 
+	def show(conn, %{"id" => topic_id}) do
+		# get vs. get! -- if get! fails to find the record in the database a 404 error will be returned
+		 # this will short circuit render from being called erroneously with "nil" as the topic if a topic wasn't found, which would likely crash the template/server
+		topic = Repo.get!(Topic, topic_id)
+		render conn, "show.html", topic: topic # name the template "show.html" to follow RESTful conventions
+	end
+
 	# conn (connection) is an Elixir struct that is the entire focal point of our Phoenix applciation
 	# 	it represents the incoming request to our application AND the outgoing response
 	# 	gets passed around from one function to another until the request has been fulfilled its ready to be returned to the user
