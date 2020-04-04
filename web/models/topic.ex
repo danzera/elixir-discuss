@@ -8,6 +8,7 @@ defmodule Discuss.Topic do
 		# the topics table has one field called "title" of data type string
 		field :title, :string
 		belongs_to :user, Discuss.User # inform Phoenix that a topic relates to a single user, and that the user model module should be used to setup the relationship
+		has_many :comments, Discuss.Comment # inform Phoenix that an individual topic may have many comments, and that the comments model module should be used to setup the relationship
 	end
 
 	# produce a changeset to record new/updated data in the database
