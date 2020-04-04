@@ -11,7 +11,7 @@ defmodule Discuss.Repo.Migrations.AddUsers do
 			add :provider, :string # github (could change if other providers are added)
 			add :token, :string # sent from the provider, would be used for followup requests to the providers
 			
-			# timestamps function automatically adds a inserted_at and updated_at property to each record in the table
+			# timestamps function automatically adds an inserted_at and updated_at property to each record in the table
 			timestamps()
 		end
 
