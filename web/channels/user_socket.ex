@@ -1,8 +1,15 @@
+# this module is the socket equivalent to the router file for http requests
 defmodule Discuss.UserSocket do
   use Phoenix.Socket
 
-  ## Channels
-  # channel "room:*", Discuss.RoomChannel
+	## Channels
+	# general structure of a channel declaration
+	# first arg to channel is the name of the channel that the JS client will be attaching to / joining
+	# 	":*" is a wild card, much like in the http router => all traffic to the "comments" channel will be funneled to the Discuss.CommentsChannel module
+	# second arg is the module that will be in charge of the channel
+	# channel "room:*", Discuss.RoomChannel
+	channel "comments:*", Discuss.CommentsChannel
+  
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket
@@ -19,8 +26,8 @@ defmodule Discuss.UserSocket do
   #
   # See `Phoenix.Token` documentation for examples in
   # performing token verification on connect.
-  def connect(_params, socket) do
-    {:ok, socket}
+  def connect(_params, socket) do # called whenever a new JavaScript client connects to our Phoenix server
+    {:ok, socket} # socket object is more or less equivalent to the "conn" object in our controllers
   end
 
   # Socket id's are topics that allow you to identify all sockets for a given user:
