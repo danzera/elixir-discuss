@@ -57,6 +57,11 @@ socket.connect()
 let channel = socket.channel("comments:1", {})
 channel.join()
   .receive("ok", resp => { console.log("Joined successfully", resp) })
-  .receive("error", resp => { console.log("Unable to join", resp) })
+	.receive("error", resp => { console.log("Unable to join", resp) })
+	
+document.querySelector('button').addEventListener('click', () => {
+	// channel.push is the function we call whenever we want to send data to our server
+	channel.push('comment:hello', { hi: 'there' })
+})
 
 export default socket

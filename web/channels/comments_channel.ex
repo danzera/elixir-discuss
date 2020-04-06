@@ -7,14 +7,23 @@ defmodule Discuss.CommentsChannel do
 	# arg #2: 
 	# arg #3: the actual socket object, which represents the entire life-cycle of the socket, just like the conn object in controllers
 	def join(topic, payload, socket) do
-		IO.puts("===== COMMENTS CHANNEL TOPIC =====")
+		IO.puts("===== COMMENTS CHANNEL join() =====")
+		IO.puts("topic, arg1")
 		IO.inspect(topic)
-		IO.puts("==================================")
+		IO.puts("===================================")
 
 		{:ok, %{hey: "there"}, socket}
 	end
 
-	def handle_in() do
-		
+	def handle_in(topic, message, socket) do
+		IO.puts("===== COMMENTS CHANNEL handle_in() =====")
+		IO.puts("topic, arg1")
+		IO.inspect(topic)
+		IO.puts("message, arg2")
+		IO.inspect(message)
+		IO.puts("========================================")
+
+		# success response
+		{:reply, :ok, socket}
 	end
 end
