@@ -18,10 +18,6 @@ defmodule Discuss.TopicController do
 	Show a list of all topics.
 	"""
 	def index(conn, _params) do
-		# log user info
-		IO.puts("===== conn.assigns ======")
-		IO.inspect(conn.assigns)
-		IO.puts("=========================")
 		# fetch all topics from the database
 		topics = Repo.all(Topic) # equivalent to Discuss.Repo.all(Discuss.Topic), shortened by aliasing Repo via Discuss.Web and Topic above
 		# render the index template and make the property "topics" available within the template
@@ -44,9 +40,7 @@ defmodule Discuss.TopicController do
 	def new(conn, _params) do
 		# example of log statements for debugging
 		# generally want to remove these once debugging has been completed, just left for reference here
-		IO.puts "+++++" # denote the start of a new log statement
-		IO.inspect conn # "inspect" crawls over a data structure and prints all values in it
-		IO.puts "+++++" # denote the end of a log statement
+		# IO.inspect conn # "inspect" crawls over a data structure and prints all values in it
 
 		# generate and empty (invalid) changeset that will later be merged with the form
 		# inputs for our changeset function in our "Topic" module
@@ -84,8 +78,6 @@ defmodule Discuss.TopicController do
 				|> put_flash(:info, "Topic created successfully!") # shows msg to user once when the page is reloaded
 				|> redirect(to: topic_path(conn, :index)) # keyword list with one entry, sends user to the route using the TopicController index function
 			{:error, changeset} ->
-				IO.puts("ERROR")
-				IO.inspect(changeset)
 				# return conn -> show the user the form again if their input was invalid
 				conn
 				|> put_flash(:error, "Error: Topic not created") # conn is automatically piped in as the first argument

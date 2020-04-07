@@ -61,7 +61,7 @@ channel.join()
 	
 document.querySelector('button').addEventListener('click', () => {
 	// channel.push is the function we call whenever we want to send data to our server
-	channel.push('comment:hello', { hi: 'there' })
+	channel.push('cheese:hello', { hi: 'there' })
 })
 
 export default socket
