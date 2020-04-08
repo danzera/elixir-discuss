@@ -53,15 +53,26 @@ let socket = new Socket("/socket", {params: {token: window.userToken}})
 
 socket.connect()
 
-// Now that you are connected, you can join channels with a topic:
-let channel = socket.channel("comments:1", {})
-channel.join()
-  .receive("ok", resp => { console.log("Joined successfully", resp) })
-	.receive("error", resp => { console.log("Unable to join", resp) })
-	
-document.querySelector('button').addEventListener('click', () => {
-	// channel.push is the function we call whenever we want to send data to our server
-	channel.push('cheese:hello', { hi: 'there' })
-})
+// refactor this file so the ID of the topic a user wants to fetch can be passed in as an argument
+const createSocket = (topicId) => {
+	// Now that you are connected, you can join channels with a topic:
+	let channel = socket.channel(`comments:${topicId}`, {})
+	channel.join()
+		.receive("ok", resp => { console.log("Joined successfully", resp) })
+		.receive("error", resp => { console.log("Unable to join", resp) })
+		
+		// EXAMPLE EVENT
+	// document.querySelector('button').addEventListener('click', () => {
+		// channel.push is the function we call whenever we want to send data to our server
+		// channel.push('cheese:hello', { hi: 'there' })
+	// })
+}
 
-export default socket
+// export default socket
+// instead of exporting the socket, add the create socket to the window scope
+// so anywhere inside the application createSocket can be called to join a given channel
+// generally not the greatest idea to add things to the window scoped, but...
+// in this case we have an HTML template with a JavaScript application embedded inside of it
+// so this is a fairly reasonable solution to ensure that the J.S. app only boots up when the template runs
+// i.e. the socket is only created when we use the show.html.eex template
+window.createSocket = createSocket;

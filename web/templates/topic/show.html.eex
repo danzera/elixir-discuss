@@ -1,2 +1,10 @@
 <%= @topic.title %>
-<button>Ping!</button>
+<script>
+	// need to wrap our call to createSocket in an event listener
+	// this ensures that the page has fully loaded
+	// i.e. that our JS file with the createSocket definition has been loaded
+	document.addEventListener('DOMContentLoaded', function() {
+		// can mix Elixir code and JavaScript, as done here
+		window.createSocket(<%= @topic.id %>)
+	});
+</script>
