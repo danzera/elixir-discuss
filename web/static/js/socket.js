@@ -61,11 +61,13 @@ const createSocket = (topicId) => {
 		.receive("ok", resp => { console.log("Joined successfully", resp) })
 		.receive("error", resp => { console.log("Unable to join", resp) })
 		
-		// EXAMPLE EVENT
-	// document.querySelector('button').addEventListener('click', () => {
+	// add an event listener
+	document.querySelector('#add-comment').addEventListener('click', () => {
+		const content = document.querySelector('#new-comment').value
+		console.log(content)
 		// channel.push is the function we call whenever we want to send data to our server
-		// channel.push('cheese:hello', { hi: 'there' })
-	// })
+		channel.push('comment:add', { content })
+	})
 }
 
 // export default socket
