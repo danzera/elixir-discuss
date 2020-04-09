@@ -3,6 +3,10 @@
 <div class="input-field">
 	<textarea id="new-comment" class="materialize-textarea"></textarea>
 	<button id="add-comment" class="btn">Add Comment</button>
+
+	<%# this is where our JavaScript app will render the list of comments, via socket.js %>
+	<ul class="collection">
+	</ul>
 </div>
 
 <script>

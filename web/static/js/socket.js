@@ -58,8 +58,13 @@ const createSocket = (topicId) => {
 	// Now that you are connected, you can join channels with a topic:
 	let channel = socket.channel(`comments:${topicId}`, {})
 	channel.join()
-		.receive("ok", resp => { console.log("Joined successfully", resp) })
-		.receive("error", resp => { console.log("Unable to join", resp) })
+		.receive("ok", resp => {
+			console.log("Joined successfully", resp);
+			renderComments(resp.comments);
+		})
+		.receive("error", resp => {
+			console.log("Unable to join", resp);
+		});
 		
 	// add an event listener
 	document.querySelector('#add-comment').addEventListener('click', () => {
@@ -68,6 +73,19 @@ const createSocket = (topicId) => {
 		// channel.push is the function we call whenever we want to send data to our server
 		channel.push('comment:add', { content })
 	})
+}
+
+// produce HTML from comments array
+function renderComments(comments) {
+	const renderedComments = comments.map(comment => {
+		return `
+			<li class="collection-item">
+				${comment.content}
+			</li>
+		`;
+	});
+
+	document.querySelector('.collection').innerHTML = renderedComments.join('');
 }
 
 // export default socket

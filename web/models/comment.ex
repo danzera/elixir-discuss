@@ -1,6 +1,9 @@
 defmodule Discuss.Comment do
 	use Discuss.Web, :model
 
+	# tell Poison that only the "content" field should be converted to JSON when transmitting model data to the client
+	@derive {Poison.Encoder, only: [:content]}
+
 	schema "comments" do
 		field :content, :string
 		belongs_to :user, Discuss.User # inform Phoenix that a comment relates to a single user, and that the user model module should be used to setup the relationship

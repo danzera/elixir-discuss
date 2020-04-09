@@ -18,13 +18,16 @@ defmodule Discuss.CommentsChannel do
 		# topic_id from the arg is a string, need an integer to work with the database
 		topic_id = String.to_integer(topic_id)
 
-		topic = Repo.get(Topic, topic_id)
-
+		topic = Topic # Topic model
+			|> Repo.get(topic_id) # ^ gets piped in to Repo.get
+			|> Repo.preload(:comments) # load up the comments that are associated with the topic
+		
+		IO.puts("requested topic and its associated comments")
 		IO.inspect(topic)
 
 		# socket object has an "assigns" property (pluarl) on it, just like the conn object
 		# can add data to this property via the "assign" function (singular) and this data will be available throughout the channel
-		{:ok, %{}, assign(socket, :topic, topic)}
+		{:ok, %{comments: topic.comments}, assign(socket, :topic, topic)}
 	end
 
 	def handle_in(name, %{"content" => content} = _message, socket) do
