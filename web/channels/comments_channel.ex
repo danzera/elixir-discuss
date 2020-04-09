@@ -46,6 +46,13 @@ defmodule Discuss.CommentsChannel do
 		case Repo.insert(changeset) do
 			# database insert successful
 			{:ok, comment} ->
+				# use exclamation mark when running broadcast function so it throws an error and reflects it in the server logs
+				# adding the exclamation mark is convention when calling the broadcast function
+				# the broadcast function takes three args
+				# 	1. the socket
+				# 	2. the name of the EVENT, conventionally similar to REST naming, will be used to specify what action to take on the client side
+				# 	3. data to send with the event
+				broadcast!(socket, "comments:#{socket.assigns.topic.id}:new", %{comment: comment})
 				{:reply, :ok, socket}
 			# database insert failure
 			{:error, _reason} ->
