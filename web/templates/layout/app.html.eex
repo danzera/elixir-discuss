@@ -14,6 +14,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 		<!-- Material Design Icons courtesy of Google -->
 		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+		<%# GENERATE A TOKEN IF A USER IS LOGGED IN - we want this for all HTML docs, which is why we add it to app.html.eex %>
+		<script>
+			<%# only want this to run if a user is logged in %>
+			<%= if @conn.assigns.user do %>
+				<%# create a token with an encryption key that encrypts the user's id %>
+				<%# assigned to a JavaScript variable on the window so it can be accessed when we create the socket within our JS application %>
+				window.userToken = "<%= Phoenix.Token.sign(Discuss.Endpoint, "key", @conn.assigns.user.id) %>"
+			<% end %>
+		</script>
   </head>
 
   <body>

@@ -7,7 +7,7 @@
 			<%= link topic.title, to: topic_path(@conn, :show, topic) %>
 
 			<%# restrict edit/delete functionality to the user that created the given topic %>
-			<%= if @conn.assigns.user.id == topic.user_id do  %>
+			<%= if @conn.assigns.user && (@conn.assigns.user.id == topic.user_id) do  %>
 				<div class="right">
 					<!-- link tags used in lieu of actual <a> tags, Elixir/Phoenix generate the appropriate HTML -->
 					<!-- can pass the entire "topic" object from the for-loop into the topic_path -->
