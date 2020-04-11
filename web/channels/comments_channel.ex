@@ -37,9 +37,13 @@ defmodule Discuss.CommentsChannel do
 		IO.inspect(content)
 
 		topic = socket.assigns.topic
+		user_id = socket.assigns.user_id
 
+		# the downside of the build_assoc function is that it can only be used to build ONE association
+		# can't be called back-to-back to build two associations
+		# we add a second arg to build_assoc to "manually" construct the association to a user_id -- this is a bit of a workaround due to the way Ecto associations operate
 		changeset = topic
-			|> build_assoc(:comments) # produce a %Comment{} struct with an association to the topic model
+			|> build_assoc(:comments, user_id: user_id) # produce a %Comment{} struct with an association to the topic model
 			|> Comment.changeset(%{content: content}) # changeset function in comment.ex model module
 
 		# attempt to insert the new comment into our database

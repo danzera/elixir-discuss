@@ -25,9 +25,23 @@ defmodule Discuss.UserSocket do
   # To deny connection, return `:error`.
   #
   # See `Phoenix.Token` documentation for examples in
-  # performing token verification on connect.
-  def connect(_params, socket) do # called whenever a new JavaScript client connects to our Phoenix server
-    {:ok, socket} # socket object is more or less equivalent to the "conn" object in our controllers
+	# performing token verification on connect.
+	# 
+	def connect(%{"token" => token}, socket) do # called whenever a new JavaScript client connects to our Phoenix server
+		IO.puts("RECEIVED A USER TOKEN: #{token}")
+		# extract user id from the token
+		# this may succeed or fail depending on the token's validity, hence the use of a case statement
+
+		case Phoenix.Token.verify(socket, "key", token) do
+			{:ok, user_id} ->
+				# assign user_id on the socket object
+				{:ok, assign(socket, :user_id, user_id)}
+			{:error, _error} ->
+				# something went wrong, return a vague error (could be a malicious attempt)
+				:error
+		end
+		# no longer need this return statement with the above returns within the case statement
+    # {:ok, socket} # socket object is more or less equivalent to the "conn" object in our controllers
   end
 
   # Socket id's are topics that allow you to identify all sockets for a given user:
