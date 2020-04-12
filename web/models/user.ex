@@ -1,6 +1,10 @@
 defmodule Discuss.User do
 	use Discuss.Web, :model # tell Phoenix this module is a "model"
 
+	# whenever Poison encodes a user, only return the email property
+	# wouldn't want any other fields include for security reasons
+	@derive {Poison.Encoder, only: [:email]}
+
 	schema "users" do # tell Phoenix what the model looks like in our database
 		field :email, :string
 		field :provider, :string

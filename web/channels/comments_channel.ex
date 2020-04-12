@@ -20,7 +20,7 @@ defmodule Discuss.CommentsChannel do
 
 		topic = Topic # Topic model
 			|> Repo.get(topic_id) # ^ gets piped in to Repo.get
-			|> Repo.preload(:comments) # load up the comments that are associated with the topic
+			|> Repo.preload(comments: [:user]) # load up the comments that are associated with the topic, and the user that is associated with each comment
 		
 		IO.puts("requested topic and its associated comments")
 		IO.inspect(topic)
@@ -56,7 +56,7 @@ defmodule Discuss.CommentsChannel do
 				# 	1. the socket
 				# 	2. the name of the EVENT, conventionally similar to REST naming, will be used to specify what action to take on the client side
 				# 	3. data to send with the event
-				broadcast!(socket, "comments:#{socket.assigns.topic.id}:new", %{comment: comment})
+				broadcast!(socket, "comments:#{socket.assigns.topic.id}:new", %{comment: Repo.preload(comment, :user)}) # need to preload the user association here to prevent the following error: (RuntimeError) cannot encode association :user from Discuss.Comment to JSON because the association was not loaded.
 				{:reply, :ok, socket}
 			# database insert failure
 			{:error, _reason} ->

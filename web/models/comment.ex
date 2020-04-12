@@ -2,7 +2,7 @@ defmodule Discuss.Comment do
 	use Discuss.Web, :model
 
 	# tell Poison that only the "content" field should be converted to JSON when transmitting model data to the client
-	@derive {Poison.Encoder, only: [:content]}
+	@derive {Poison.Encoder, only: [:content, :user]}
 
 	schema "comments" do
 		field :content, :string

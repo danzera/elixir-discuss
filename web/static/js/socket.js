@@ -100,9 +100,17 @@ function renderComment(event) {
 
 // generate HTML for an individual comment
 function generateCommentHTML(comment) {
+	let email='Anonymous';
+	if (comment.user) {
+		email = comment.user.email;
+	}
+
 	return `
 		<li class="collection-item">
 			${comment.content}
+			<div class="secondary-content">
+				${email}
+			</div>
 		</li>
 	`;
 }
